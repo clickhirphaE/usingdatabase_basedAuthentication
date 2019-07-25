@@ -14,69 +14,61 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
-    @Bean
-    public  BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //*************
     @Autowired
     private SSUserDetailsService userDetailsService;
     @Autowired
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
-    public UserDetailsService userDetailsServiceBean() throws Exception{
+    public UserDetailsService userDetailsServiceBean() throws Exception {
         return new SSUserDetailsService(userRepository);
     }
+
     //*******************************
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()  //
+                .authorizeRequests()
 
                 //Adding role
-                .antMatchers("/", "h2-console/**").permitAll()
+                .antMatchers("/", "/h2-console/**", "/register").permitAll()
 
-               // .access("hasAnyAuthority('USER','ADMIN')")
+                //.access("hasAnyAuthority('USER','ADMIN')")
                 .antMatchers("/admin").access("hasAuthority('ADMIN')")
                 //
                 .anyRequest().authenticated()
                 .and()  //Adds additional authentication rules
                 .formLogin().loginPage("/login").permitAll()
+                .and().logout()
+                .logoutRequestMatcher(
+                        new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login").permitAll().permitAll()
                 .and()
-        .logout()
-        .logoutRequestMatcher( new AntPathRequestMatcher("/logout"))
-        .logoutSuccessUrl("/login").permitAll()
+                .httpBasic();
 
-        .and()
-        .httpBasic()
-        ;
-        http .csrf().disable();
-        http .headers().frameOptions().disable();
-
+        http
+                .csrf().disable();
+        http
+                .headers().frameOptions().disable();
 
 
     }
+
     @Override
-    protected  void configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+
         auth.userDetailsService(userDetailsServiceBean())
                 .passwordEncoder(passwordEncoder());
 
 
-//        auth.inMemoryAuthentication()
-//                .withUser("dave")
-//                .password(passwordEncoder().encode("begreat"))
-//                .authorities("ADMIN")
-//                .and()
-//
-//        //auth.inMemoryAuthentication()
-//                .withUser("user")
-//        .password(passwordEncoder().encode("password"))
-//        .authorities("USER")
-//
-//
-//        ;
-//
- }
+
+    }
 }

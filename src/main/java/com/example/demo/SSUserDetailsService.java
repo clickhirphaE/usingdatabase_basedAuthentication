@@ -1,6 +1,7 @@
 package com.example.demo;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,18 +14,17 @@ import java.util.HashSet;
 import java.util.Set;
 @Transactional
 @Service
-
-
 public class SSUserDetailsService implements UserDetailsService {
+
     private UserRepository userRepository;
 
-    public SSUserDetailsService(UserRepository userRepository) {
+    public SSUserDetailsService(UserRepository userRepository) { //parametrized constructor
         this.userRepository = userRepository;
 
     }
 
    @Override   //remove the comment
-    public UserDetails LoadUserByname(String username) throws UsernameNotFoundException {
+    public  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             User user = userRepository.findByUsername(username);
             if (user == null) {
@@ -44,5 +44,6 @@ public class SSUserDetailsService implements UserDetailsService {
         }
         return authorities;
     }
+
 
 }
