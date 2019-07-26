@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+
+      xmlns:th="www.thymeleaf.org"
+      xmlns:sec="www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset=" UTF-8">
+<title>Title</title>
+</head>
+<body>
+<div><a href="/addsubject" style="text-decoration: none; "><button>Add a Subject </button></a><a href="/add" style="text-decoration: none"><button>Add a Course</button></a></div>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Subject</th>
+        <th>Instructor</th>
+        <th>Credits</th>
+        <th>Actions</th>
+
+
+    </tr>
+
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.title}"></td>
+        <td th:text="${course.subject.subjectName}"></td>
+        <td th:text="${course.instructor}"></td>
+        <td th:text="${course.credit}"></td>
+
+    </tr>
+</table>
+
+</body>
+</html>

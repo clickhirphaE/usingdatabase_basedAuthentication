@@ -56,9 +56,9 @@ public class HomeController {
         model.addAttribute("user",userRepository.findByUsername(username));
         return "secure";
 }
-//@RequestMapping("/admin")
-//    public String admin(){
-//        return "admin";
-//}
+@RequestMapping("/admin")
+    public String admin(){
+        return "admin";
+}
 
 }

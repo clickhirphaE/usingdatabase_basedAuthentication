@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="www.thymeleaf.org"
+      xmlns:sec="www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<a href="/register"><button type="button"><h3>Register</h3></button> </a>
+<!--a href="/register"></button> </a-->
+
 <h1>Login page</h1>
 <div th:if="${param.error}">Invalid password</div>
 <div th:if="${param.logout}">you've been logged out</div>
-<form th:action="@{/login}" method="post">
+<form th:action="@{/secure}" method="post">
     <div><label>User name:<input type="text" name="username"/> </label></div>
     <div><label>password:<input type="password" name="password"/> </label></div>
     <div><input type="submit" value="sign in"/> </div>
